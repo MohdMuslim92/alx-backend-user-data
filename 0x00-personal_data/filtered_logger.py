@@ -8,10 +8,7 @@ from typing import List
 
 
 def filter_datum(
-        fields: List[str],
-        redaction: str,
-        message: str,
-        separator: str
+        fields: List[str], redaction: str, message: str, separator: str,
         ) -> str:
     """Replaces specified fields in a log message with redaction."""
     pattern = re.compile(f'({"|".join(fields)}=)[^{separator}]*')

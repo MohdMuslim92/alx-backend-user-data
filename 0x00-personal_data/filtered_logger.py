@@ -23,6 +23,7 @@ def filter_datum(
     extract, replace = (pattern["extract"], pattern["replace"])
     return re.sub(extract(fields, separator), replace(redaction), message)
 
+
 def get_logger() -> logging.Logger:
     """Returns a configured logging.Logger object."""
     logger = logging.getLogger("user_data")

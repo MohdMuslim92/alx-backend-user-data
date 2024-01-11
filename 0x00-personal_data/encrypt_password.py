@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 This module provides a function for hashing passwords using the bcrypt hashing
-algorithm with salt. 
+algorithm with salt.
 """
 
 import bcrypt

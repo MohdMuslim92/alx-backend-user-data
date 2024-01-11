@@ -13,8 +13,6 @@ def filter_datum(
         message: str,
         separator: str
         ) -> str:
-    """
-    Replaces specified fields in a log message with redaction.
-    """
+    """Replaces specified fields in a log message with redaction."""
     pattern = re.compile(f'({"|".join(fields)}=)[^{separator}]*')
     return pattern.sub(fr'\1{redaction}', message)

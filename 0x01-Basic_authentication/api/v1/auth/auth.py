@@ -24,14 +24,22 @@ class Auth:
             if excluded_path.endswith('/'):
                 excluded_path = excluded_path[:-1]
 
-            if path.startswith(excluded_path):
-                return False
+            if excluded_path.endswith('*'):
+                excluded_path_prefix = excluded_path[:-1]
+                if path.startswith(excluded_path_prefix):
+                    return False
+                elif path.startswith(excluded_path):
+                    return False
 
         return True
 
     def authorization_header(self, request=None) -> str:
         """ Gets the value of the Authorization header from the request
         """
+        if request is None or 'Authorization' not in request.headers:
+            return None
+        return request.headers['Authorization']
+
         if request and 'Authorization' in request.headers:
             return request.headers['Authorization']
         return None

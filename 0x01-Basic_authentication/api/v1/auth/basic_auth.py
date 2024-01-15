@@ -62,11 +62,17 @@ class BasicAuth(Auth):
         if ':' not in decoded_base64_authorization_header:
             return None, None
 
-        # Split the string into user email and password
-        user_email, user_password = decoded_base64_authorization_header.split(
-                ':', 1)
+        # Use regex to extract user email and password
+        pattern = r'(?P<user>[^:]+):(?P<password>.+)'
+        match = re.fullmatch(
+                pattern, decoded_base64_authorization_header.strip())
 
-        return user_email, user_password
+        if match:
+            user_email = match.group('user')
+            user_password = match.group('password')
+            return user_email, user_password
+
+        return None, None
 
     def user_object_from_credentials(
             self, user_email: str, user_pwd: str) -> TypeVar('User'):

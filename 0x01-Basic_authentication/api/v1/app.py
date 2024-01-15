@@ -12,6 +12,11 @@ import os
 app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+auth = None
+auth_type = getenv("AUTH_TYPE")
+if auth_type:
+    from api.v1.auth.auth import Auth
+    auth = Auth()
 
 
 @app.errorhandler(404)
@@ -19,6 +24,27 @@ def not_found(error) -> str:
     """ Not found handler
     """
     return jsonify({"error": "Not found"}), 404
+
+
+# Add the before_request method for request filtering
+@app.before_request
+def before_request():
+    """ Before request handler
+    """
+    if auth is None:
+        return
+
+    excluded_paths = ['/api/v1/status/',
+                      '/api/v1/unauthorized/',
+                      '/api/v1/forbidden/']
+
+    if request.path not in excluded_paths and auth.require_auth(
+            request.path, excluded_paths):
+        if auth.authorization_header(request) is None:
+            abort(401)
+
+        if auth.current_user(request) is None:
+            abort(403)
 
 
 # Error handler for HTTP status code 401

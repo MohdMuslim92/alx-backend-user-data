@@ -33,17 +33,17 @@ def before_request():
     """ Before request handler
     """
     if auth is None:
-        return
+        pass
 
-    excluded_paths = ['/api/v1/status/',
-                      '/api/v1/unauthorized/',
-                      '/api/v1/forbidden/']
+    else:
+        excluded_paths = ['/api/v1/status/',
+                          '/api/v1/unauthorized/',
+                          '/api/v1/forbidden/']
+        setattr(request, "current_user", auth.current_user(request))
 
-    if request.path not in excluded_paths and auth.require_auth(
-            request.path, excluded_paths):
+    if auth.require_auth(request.path, excluded_paths):
         if auth.authorization_header(request) is None:
             abort(401)
-
         if auth.current_user(request) is None:
             abort(403)
 

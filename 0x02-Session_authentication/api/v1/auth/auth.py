@@ -2,7 +2,7 @@
 """ Authentication module
 """
 
-from flask import request
+from flask import request, current_app
 from typing import List, TypeVar
 
 
@@ -45,3 +45,12 @@ class Auth:
         """ Gets the current user based on the request
         """
         return None
+
+    def session_cookie(self, request=None) -> str:
+        """ Gets the value of the session cookie from the request
+        """
+        if request is None:
+            return None
+
+        session_name = current_app.config.get('SESSION_NAME', '_my_session_id')
+        return request.cookies.get(session_name)

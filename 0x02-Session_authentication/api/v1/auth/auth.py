@@ -15,22 +15,18 @@ class Auth:
         """
         if path is None or excluded_paths is None or not excluded_paths:
             return True
+        elif path in excluded_paths:
+            return False
 
-        # Make the path slash-tolerant
-        if not path.endswith('/'):
-            path += '/'
-
-        for excluded_path in excluded_paths:
-            if excluded_path.endswith('/'):
-                excluded_path = excluded_path[:-1]
-
-            if excluded_path.endswith('*'):
-                excluded_path_prefix = excluded_path[:-1]
-                if path.startswith(excluded_path_prefix):
+        else:
+            for i in excluded_paths:
+                if i.startswith(path):
                     return False
-                elif path.startswith(excluded_path):
+                if path.startswith(i):
                     return False
-
+                if i[-1] == "*":
+                    if path.startswith(i[:-1]):
+                        return False
         return True
 
     def authorization_header(self, request=None) -> str:

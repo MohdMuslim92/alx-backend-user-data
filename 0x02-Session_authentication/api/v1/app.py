@@ -33,22 +33,18 @@ def before_request():
     """ Before request handler
     """
     if auth is None:
-        return
+        pass
     else:
         excluded_paths = ['/api/v1/status/',
                           '/api/v1/unauthorized/',
                           '/api/v1/forbidden/']
         setattr(request, "current_user", auth.current_user(request))
 
-    if request.path not in excluded_paths and auth.require_auth(
-            request.path, excluded_paths):
+    if auth.require_auth(request.path, excluded):
         if auth.authorization_header(request) is None:
             abort(401)
-
-        request.current_user = auth.current_user(request)
-
-        if request.current_user(request) is None:
-            abort(403)
+            if auth.current_user(request) is None:
+                abort(403)
 
 
 # Error handler for HTTP status code 401

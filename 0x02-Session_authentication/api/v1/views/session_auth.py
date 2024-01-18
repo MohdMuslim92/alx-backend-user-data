@@ -14,7 +14,7 @@ def login():
     email = request.form.get("email")
     password = request.form.get("password")
 
-    if email is None or email == "" :
+    if email is None or email == "":
         return jsonify({"error": "email missing"}), 400
 
     if password is None or password == "":

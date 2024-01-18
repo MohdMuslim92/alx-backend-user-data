@@ -1,4 +1,4 @@
-# models/user_session.py
+#!/usr/bin/env python3
 """Module defining the UserSession model for storing user session
 information."""
 

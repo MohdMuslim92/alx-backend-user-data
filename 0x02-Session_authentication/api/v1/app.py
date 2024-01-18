@@ -20,7 +20,7 @@ if auth_type == "auth":
 elif auth_type == "session_auth":
     from api.v1.auth.session_auth import SessionAuth
     auth = SessionAuth()
-elif AUTH_TYPE == "basic_auth":
+elif auth_type == "basic_auth":
     from api.v1.auth.basic_auth import BasicAuth
     auth = BasicAuth()
 
@@ -47,7 +47,6 @@ def before_request():
                           '/api/v1/auth_session/login/']
         setattr(request, "current_user", auth.current_user(request))
 
-    request.current_user = auth.current_user(request)
     if auth.require_auth(request.path, excluded_paths):
         cookie = auth.session_cookie(request)
         if auth.authorization_header(

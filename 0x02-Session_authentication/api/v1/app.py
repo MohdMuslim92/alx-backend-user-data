@@ -47,6 +47,7 @@ def before_request():
                           '/api/v1/auth_session/login/']
         setattr(request, "current_user", auth.current_user(request))
 
+    request.current_user = auth.current_user(request)
     if auth.require_auth(request.path, excluded_paths):
         cookie = auth.session_cookie(request)
         if auth.authorization_header(

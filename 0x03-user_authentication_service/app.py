@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Basic Flask App for user authentication.
 """

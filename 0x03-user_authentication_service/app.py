@@ -2,7 +2,7 @@
 """
 Basic Flask App for user authentication.
 """
-from flask import abort, Flask, jsonify, request
+from flask import abort, Flask, jsonify, redirect, request
 from auth import Auth
 
 app = Flask(__name__)
@@ -52,6 +52,23 @@ def login():
             abort(401, 'Unauthorized')
     except KeyError:
         abort(400, 'Bad Request')
+
+
+@app.route('/sessions', methods=['DELETE'])
+def logout():
+    """Logout route to destroy the session."""
+    session_id = request.cookies.get('session_id')
+
+    if not session_id:
+        abort(403)
+
+    user = AUTH.get_user_from_session_id(session_id)
+
+    if user:
+        AUTH.destroy_session(user.id)
+        return redirect('/')
+    else:
+        abort(403)
 
 
 if __name__ == "__main__":
